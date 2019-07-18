@@ -8,8 +8,8 @@ using namespace std;
 class EdgeDetection: public BaseFilter{
 
 public:
-    EdgeDetection(int _radius, int _numberOfInputChannels, int _numberOfOutputImages):
-        BaseFilter(_radius, _numberOfInputChannels, _numberOfOutputImages){
+    EdgeDetection(int _radius):
+        BaseFilter(_radius){
         weight = 8;
         neighbors = -1;
     }

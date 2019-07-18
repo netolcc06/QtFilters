@@ -8,8 +8,8 @@ using namespace std;
 class SplitChannels: public BaseFilter{
 
 public:
-    SplitChannels(int _radius, int _numberOfInputChannels, int _numberOfOutputImages):
-        BaseFilter(_radius, _numberOfInputChannels, _numberOfOutputImages){
+    SplitChannels(int _radius):
+        BaseFilter(_radius){
         radius = 1;
         weight = 1;
         neighbors = 0;

@@ -13,18 +13,22 @@ public:
     int weight;
     int neighbors;
     int radius;
-    int numberOfInputChannels;
-    int numberOfOutputImages;
-    bool monochromatic;
 
-    BaseFilter(int _radius, int _numberOfInputChannels, int _numberOfOutputImages):
-    radius(_radius), numberOfInputChannels(_numberOfInputChannels), numberOfOutputImages(_numberOfOutputImages){
-        monochromatic = (numberOfInputChannels==1);
+    BaseFilter(int _radius):radius(_radius){
+
+    }
+
+    bool isMonochromatic(QImage & image){
+        int format = image.format();
+        if(format == 3 || format == 24 || format == 28)
+            return true;
+        return false;
     }
 
     void apply(QImage & image){
         QImage copy(image);
 
+        bool monochromatic = isMonochromatic(image);
         for(int i=0; i<image.height();i++){
             for(int j=0; j<image.width(); j++){
                 int sumR = 0, sumG = 0, sumB = 0, gray = 0;
@@ -52,6 +56,7 @@ public:
                     }
                 }
 
+                //cout << totalWeight << endl;
                 if(totalWeight == 0)
                     totalWeight = 1;
                 if(monochromatic){
@@ -68,7 +73,7 @@ public:
         }
    }
 
-    void saveResults(QImage & image, QString filename){
+    void saveResults(QImage & image, QString filename, int numberOfOutputImages){
         if(numberOfOutputImages==1){
             image.save(filename+"-filtered.png");
         }
@@ -95,8 +100,6 @@ public:
     void printFilterParameters(){
         cout << "weight " << weight << endl;
         cout << "radius " << radius << endl;
-        cout << "numberOfInputChannels " << numberOfInputChannels << endl;
-        cout << "numberOfOutputImages " << numberOfOutputImages << endl;
     }
 };
 
