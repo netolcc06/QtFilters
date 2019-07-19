@@ -28,6 +28,10 @@ public:
         std::vector<string> options;
         std::vector<BaseFilter*> fOptions;
         int pos = 0;
+
+        cout << "This is an Image App\n" << endl;
+        cout << "Available filters" << endl;
+
         while(it != filters.end()){
             if(!(monochromatic && it->first == "RGB Split")){
                 cout<< pos << ". " << it->first << endl;
@@ -38,7 +42,7 @@ public:
             it++;
         }
 
-        cout << "Type the selected filter number: ";
+        cout << "\nType the selected filter number: ";
         unsigned int filterOpt = 0, radius = 0, weight = 0;
         cin >> filterOpt;
         if(filterOpt < 0 || filterOpt >= options.size()){
@@ -46,10 +50,10 @@ public:
             cout << "GOOD BYE BLUE SKY" << endl;
             return;
         }
-        cout << "Selected Filter: " << options[filterOpt] << endl;
-        cout << "Type the " << options[filterOpt] << " radius ";
+        cout << "\nSelected Filter: " << options[filterOpt] << endl;
+        cout << "Type the " << options[filterOpt] << " radius: ";
         cin >> radius;
-        cout << "Type the " << options[filterOpt] << " weight ";
+        cout << "Type the " << options[filterOpt] << " weight: ";
         cin >> weight;
 
         fOptions[filterOpt]->setParameters(radius, weight);
@@ -57,6 +61,8 @@ public:
         fOptions[filterOpt]->apply(image);
         int numberOfOutputImages = (options[filterOpt] == "RGB Split")? 3 : 1;
         fOptions[filterOpt]->saveResults(image,PATH,numberOfOutputImages);
+
+        cout << "\nImage file processed successfully!" << endl;
     }
 
     void run(){
