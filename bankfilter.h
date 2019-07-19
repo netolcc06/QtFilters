@@ -15,14 +15,32 @@
 
 using namespace std;
 
+/**
+ * @brief The BankFilter class three main purposes:
+ * I) To register the custom created filters in order to save them for future computations.
+ * II) To present a menu with the available filters and treating the user input.
+ * III) Apply the desired filter to the source image and save the results.
+ */
 class BankFilter{
 
 public:
     BankFilter(){}
+
+    /**
+     * @brief registerFilter Registers the filter by inserting it into a map<string, BaseFilter*>.
+     * @param _filtername Key of the map.
+     * @param _f Filter to be inserted.
+     */
     void registerFilter(string _filtername, BaseFilter * _f){
         filters.insert(std::make_pair(_filtername, _f));
     }
 
+    /**
+     * @brief listFilters Lists the available filters and treats the input.
+     * @param image Input image
+     * @param monochromatic Tells whether the input image is monochromatic or not.
+     * @param PATH Path to the input image.
+     */
     void listFilters(QImage & image, bool monochromatic, QString PATH){
         std::map<string, BaseFilter*>::iterator it = filters.begin();
         std::vector<string> options;
@@ -45,7 +63,7 @@ public:
         cout << "\nType the selected filter number: ";
         unsigned int filterOpt = 0, radius = 0, weight = 0;
         cin >> filterOpt;
-        if(filterOpt < 0 || filterOpt >= options.size()){
+        if(filterOpt >= options.size()){
             cout << "You need to choose a valid option" << endl;
             cout << "GOOD BYE BLUE SKY" << endl;
             return;
@@ -57,16 +75,11 @@ public:
         cin >> weight;
 
         fOptions[filterOpt]->setParameters(radius, weight);
-        //fOptions[filterOpt]->printFilterParameters();
         fOptions[filterOpt]->apply(image);
         int numberOfOutputImages = (options[filterOpt] == "RGB Split")? 3 : 1;
         fOptions[filterOpt]->saveResults(image,PATH,numberOfOutputImages);
 
         cout << "\nImage file processed successfully!" << endl;
-    }
-
-    void run(){
-
     }
 
 private:

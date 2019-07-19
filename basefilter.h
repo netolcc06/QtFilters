@@ -7,6 +7,10 @@
 
 using namespace std;
 
+/**
+ * @brief isMonochromatic Takes an image as input and returns true if it contains only 1 color channel.
+ * Returns false in case the image has more than 1 color channel.
+ */
 bool isMonochromatic(QImage & image){
     int format = image.format();
     if(format == 3 || format == 24 || format == 28)
@@ -14,6 +18,14 @@ bool isMonochromatic(QImage & image){
     return false;
 }
 
+/**
+ * @brief BaseFilter The BaseFilter follows the specification which defines a filter with a radius and a weight
+ * to the central pixel of the mask.
+ * In order to generalize the idea, there is a new variable called neighbors. In the original
+ * implementation, mask pixels other than the central one had 1 as standard value. With this
+ * variable one can create new filters with custom values for the central pixel neighbors.
+ * The Edge Detection was created to demonstrate how important is this generalization.
+ */
 class BaseFilter{
 public:
 
@@ -21,16 +33,24 @@ public:
     int neighbors = 0;
     int radius = 0;
 
+    /**
+     * Basic constructor: you need only to specify the filter radius.
+     * The other variables weight and neighbors should be set according to
+     * the filter behaviour you expect. This can be done at their constructors
+     * or using the setParameters function (see below).
+     */
     BaseFilter(int _radius):radius(_radius){
 
     }
 
+    // Copy constructor
     BaseFilter(const BaseFilter &rhs){
         this->weight = rhs.weight;
         this->radius = rhs.radius;
         this->neighbors = rhs.neighbors;
     }
 
+    // Assignment implementation
     BaseFilter &operator=(BaseFilter &rhs){
         this->weight = rhs.weight;
         this->radius = rhs.radius;
@@ -39,6 +59,7 @@ public:
         return *this;
     }
 
+    // Virtual destructor in order to be inherited.
     virtual ~BaseFilter(){}
 
     void setRadius(int _radius){
@@ -49,8 +70,18 @@ public:
         weight = _weight;
     }
 
+    /**
+     * @brief setParameters Virtual function required to be implemented for the new filters.
+     * When you inherit BaseFilter, you create a new filter by specifying custom radius, weights
+     * and neighbors for your particular case.
+     */
     virtual void setParameters(int _radius, int _weight)=0;
 
+    /**
+     * @brief apply Applies the specified filter to the image.
+     * Results are shown inplace.
+     * Monochromatic and polychromatic cases are treated separately.
+     */
     void apply(QImage & image){
         QImage copy(image);
 
@@ -82,6 +113,11 @@ public:
                     }
                 }
 
+                /**
+                 * The test totalWeight == 0 is used to prevent divisions by zero.
+                 * By doing that, one could implement filter which sum of all weights is equal to zero.
+                 * An example of such case is the edge detection filter with radius = 1, weight = 8 and neighbors = -1.
+                 */
                 if(totalWeight == 0)
                     totalWeight = 1;
                 if(monochromatic){
@@ -98,11 +134,18 @@ public:
         }
    }
 
+    /**
+     * @brief saveResults It saves the filter output at the same directory of the input image.
+     * @param numberOfOutputImages is necessary because of the Split RGB filter.
+     * When this filter is chosen, the output has three images. For all the other cases,
+     * the result is a single image.
+     */
     void saveResults(QImage & image, QString filename, int numberOfOutputImages){
         if(numberOfOutputImages==1){
             image.save(filename+"-filtered.png");
         }
         else if (numberOfOutputImages==3) {
+            // Outputs the color channels in three separate images.
             QImage red(image.size(), image.format()), green(image.size(), image.format()), blue(image.size(), image.format());
             for(int i=0; i<image.height(); i++){
                 for(int j = 0; j<image.width(); j++){
@@ -122,6 +165,7 @@ public:
         }
     }
 
+    // For debug purposes.
     void printFilterParameters(){
         cout << "weight " << weight << endl;
         cout << "radius " << radius << endl;
