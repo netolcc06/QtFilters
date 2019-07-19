@@ -7,23 +7,46 @@
 
 using namespace std;
 
+bool isMonochromatic(QImage & image){
+    int format = image.format();
+    if(format == 3 || format == 24 || format == 28)
+        return true;
+    return false;
+}
+
 class BaseFilter{
 public:
 
-    int weight;
-    int neighbors;
-    int radius;
+    int weight = 0;
+    int neighbors = 0;
+    int radius = 0;
 
     BaseFilter(int _radius):radius(_radius){
 
     }
 
-    bool isMonochromatic(QImage & image){
-        int format = image.format();
-        if(format == 3 || format == 24 || format == 28)
-            return true;
-        return false;
+    BaseFilter(const BaseFilter &rhs){
+        this->weight = rhs.weight;
+        this->radius = rhs.radius;
+        this->neighbors = rhs.neighbors;
     }
+
+    BaseFilter &operator=(BaseFilter &rhs){
+        this->weight = rhs.weight;
+        this->radius = rhs.radius;
+        this->neighbors = rhs.neighbors;
+
+        return *this;
+    }
+    void setRadius(int _radius){
+        radius = _radius;
+    }
+
+    void setWeight(int _weight){
+        weight = _weight;
+    }
+
+    virtual void setParameters(int _radius, int _weight){};
 
     void apply(QImage & image){
         QImage copy(image);

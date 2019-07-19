@@ -14,6 +14,12 @@ public:
         weight = 1;
         neighbors = 0;
     }
+
+    void setParameters(int _radius, int _weight){
+        radius = 1;
+        weight = 1;
+        neighbors = 0;
+    }
 };
 
 #endif // SPLITCHANNELS_H

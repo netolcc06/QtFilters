@@ -13,6 +13,13 @@ public:
         weight = 1;
         neighbors = 1;
     }
+
+    void setParameters(int _radius, int _weight){
+        radius = _radius;
+        weight = 1;
+        neighbors = 1;
+    }
+
 };
 
 #endif // BLUR_H
