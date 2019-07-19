@@ -14,9 +14,9 @@ public:
         neighbors = 1;
     }
 
-    void setParameters(int _radius, int _weight){
+    void setParameters(int _radius, int _weight)override{
         radius = _radius;
-        weight = 1;
+        weight = _weight;
         neighbors = 1;
     }
 

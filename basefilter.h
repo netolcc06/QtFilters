@@ -38,6 +38,9 @@ public:
 
         return *this;
     }
+
+    virtual ~BaseFilter(){}
+
     void setRadius(int _radius){
         radius = _radius;
     }
@@ -46,7 +49,7 @@ public:
         weight = _weight;
     }
 
-    virtual void setParameters(int _radius, int _weight){};
+    virtual void setParameters(int _radius, int _weight)=0;
 
     void apply(QImage & image){
         QImage copy(image);
@@ -79,7 +82,6 @@ public:
                     }
                 }
 
-                //cout << totalWeight << endl;
                 if(totalWeight == 0)
                     totalWeight = 1;
                 if(monochromatic){

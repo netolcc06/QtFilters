@@ -41,18 +41,19 @@ public:
         cout << "Type the selected filter number: ";
         unsigned int filterOpt = 0, radius = 0, weight = 0;
         cin >> filterOpt;
+        if(filterOpt < 0 || filterOpt >= options.size()){
+            cout << "You need to choose a valid option" << endl;
+            cout << "GOOD BYE BLUE SKY" << endl;
+            return;
+        }
         cout << "Selected Filter: " << options[filterOpt] << endl;
         cout << "Type the " << options[filterOpt] << " radius ";
         cin >> radius;
         cout << "Type the " << options[filterOpt] << " weight ";
         cin >> weight;
 
-        cout << "---------------" << endl;
-        cout << "options[filterOpt] = " << options[filterOpt] << endl;
-        string key = options[filterOpt];
-
         fOptions[filterOpt]->setParameters(radius, weight);
-        fOptions[filterOpt]->printFilterParameters();
+        //fOptions[filterOpt]->printFilterParameters();
         fOptions[filterOpt]->apply(image);
         int numberOfOutputImages = (options[filterOpt] == "RGB Split")? 3 : 1;
         fOptions[filterOpt]->saveResults(image,PATH,numberOfOutputImages);

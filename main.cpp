@@ -38,32 +38,24 @@ int main(int argc, char *argv[])
     //while(true){
     //    cout <<
     //}
-    BaseFilter edge = EdgeDetection(4);
-    BaseFilter blur = Blur(1);
-    BaseFilter split = SplitChannels(1);
+    BaseFilter *edge = new EdgeDetection(4);
+    BaseFilter *blur = new Blur(1);
+    BaseFilter *split = new SplitChannels(1);
     //--edge.apply(inImage);
     //--edge.saveResults(inImage,PATH, 1);
 
     //map<QString, BaseFilter> filters;
     BankFilter filters;
 
-    filters.registerFilter(string("Edge detection"), &edge);
-    filters.registerFilter(string("Blur"), &blur);
-    filters.registerFilter(string("RGB Split"), &split);
+    filters.registerFilter(string("Edge detection"), edge);
+    filters.registerFilter(string("Blur"), blur);
+    filters.registerFilter(string("RGB Split"), split);
 
     filters.listFilters(inImage, monochromatic, PATH);
-    //filters[filtername] = f;
-    //filters.insert(std::make_pair(filtername, f));
 
-    /*SplitChannels * split = new SplitChannels(1,3,1);
-    split->apply(inImage);
-    split->saveResults(inImage,PATH);
-    delete split;*/
-
-    /*Blur * blur = new Blur(3);
-    blur->apply(inImage);
-    blur->saveResults(inImage,PATH, 1);
-    delete blur;*/
+    delete edge;
+    delete blur;
+    delete split;
 
     return EXIT_SUCCESS;
 }
